@@ -1,6 +1,3 @@
-#include <avr/io.h>
-#include <util/delay.h>
-
 #include "button.hpp"
 #include "display.hpp"
 #include "constants.hpp"

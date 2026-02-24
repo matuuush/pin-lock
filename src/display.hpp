@@ -3,90 +3,32 @@
 
 #include "constants.hpp"
 
-constexpr byte NUMERALS[10] = {0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80, 0x90};;
-constexpr byte DIGIT_POSITIONS[] = {0xF8, 0xF4, 0xF2, 0xF1};
-constexpr int POSITIONS = sizeof(DIGIT_POSITIONS) / sizeof(DIGIT_POSITIONS[0]);
+class Text;
 
-void PORTD_write(byte pin, byte value) {
-    if (value == LOW) {
-        PORTD &= ~(1 << pin);
-    } else if (value == HIGH) {
-        PORTD |= (1 << pin);
-    }
-}
+//                         A     b     C     d     E     F     G     H     I     J     K     L     M     n     o     P     q     r     S     t     U     v     w   ksi(=)  Y     Z
+constexpr byte CHARS[] { 0x88, 0x83, 0xC6, 0xA1, 0x86, 0x8E, 0x82, 0x89, 0xF9, 0xE1, 0x85, 0xC7, 0xC8, 0xAB, 0xA3, 0x8C, 0x98, 0xAF, 0x92, 0x87, 0xC1, 0xE3, 0x81, 0xB6, 0x91, 0xA4 };
 
-void PORTB_write(byte pin, byte value) {
-    if (value == LOW) {
-        PORTB &= ~(1 << pin);
-    } else if (value == HIGH) {
-        PORTB |= (1 << pin);
-    }
-}
+//                               0     1     2     3     4     5     6     7     8     9
+constexpr byte NUMERALS[10] = {0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80, 0x90};
+constexpr byte DIGIT_POSITIONS[] = {0xF8, 0xF4, 0xF2, 0xF1}; // left to r
+constexpr int DISPLAY_POSITIONS = sizeof(DIGIT_POSITIONS) / sizeof(DIGIT_POSITIONS[0]);
 
-bool is_bit_set(byte byte, int bit) {
-    return byte & (1 << bit);
-}
+void PORTD_write(byte pin, byte value);
+void PORTB_write(byte pin, byte value);
+bool is_bit_set(byte byte, int bit);
 
 class Display {
 private:
     byte buffer[4];
     byte currentPos;
-    void load_current_char() {
-        byte numeral = buffer[currentPos];
-        byte position = DIGIT_POSITIONS[currentPos];
-        PORTD_write(LATCH_PIN, LOW);
-        for (int i = 7; i >= 0; i--) {
-            PORTD_write(CLOCK_PIN, LOW);
-            PORTB_write(DATA_PIN, is_bit_set(numeral, i));
-            PORTD_write(CLOCK_PIN, HIGH);
-        }
-        for (int i = 7; i >= 0; i--) {
-            PORTD_write(CLOCK_PIN, LOW);
-            PORTB_write(DATA_PIN, is_bit_set(position, i));
-            PORTD_write(CLOCK_PIN, HIGH);
-        }
-        PORTD_write(LATCH_PIN, HIGH);
-    }
-
+    void load_current_char();
 public:
-    Display() : currentPos(0) {
-        DDRD |= (1 << LATCH_PIN) | (1 << CLOCK_PIN);
-        DDRB |= (1 << DATA_PIN);
-    }
-    Display(int number) : Display() {
-        write_number(number);
-    }
-    /*Display(std::string str) {
-        Display();
-        write_string(str);
-    }*/
-
-    void write_number(int number) {
-        if (number > 9999) number = 9999;
-
-        for (int i = 0; i < POSITIONS; i++) {
-            int index = number % 10;
-            byte digit = NUMERALS[index];
-            buffer[i] = digit;
-            number /= 10;
-        }
-    }
-
-    /*void write_string(std::string str) {
-        if (str.len > POSITIONS) str = str.substr(0, 4);
-
-        for (int i = 0; i < POSITIONS; i++) {
-            int index = number % 10;
-            byte digit = NUMERALS[index];
-            buffer[i] = digit;
-            number /= 10;
-        }
-    }*/
-
-    void refresh() {
-        load_current_char();
-        ++currentPos %= POSITIONS;
-    }
+    Display();
+    Display(int number);
+    Display(Text t);
+    void write_number(int number);
+    void write_string(Text t);
+    void refresh();
 };
 
 #endif
