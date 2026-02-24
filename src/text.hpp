@@ -5,7 +5,7 @@
 
 class Text {
 private:
-    char text[DISPLAY_POSITIONS];
+    char text[DIGITS_COUNT];
 public:
     void set(char text[]);
     char* get();

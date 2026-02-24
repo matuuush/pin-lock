@@ -26,7 +26,7 @@ $(TARGET).hex: $(TARGET).elf
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
 
 size: $(TARGET).elf
-	$(AVR-SIZE) -A $<
+	$(AVRSIZE) -A $<
 
 upload: $(TARGET).hex
 	$(AVRDUDE) -v -p $(MCU) -c arduino -P $(PORT) -b $(BAUD) -D -U flash:w:$<:i

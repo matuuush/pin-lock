@@ -1,7 +1,7 @@
 #include "text.hpp"
 
 void Text::set(char str[]) {
-    for (int i = 0; i < DISPLAY_POSITIONS; i++){
+    for (byte i = 0; i < DIGITS_COUNT; i++){
         char ch = str[i];
         text[i] = ((ch == '\0') ? ' ' : ch);
     }

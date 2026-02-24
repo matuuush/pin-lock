@@ -18,20 +18,20 @@ void PORTB_write(byte pin, byte value) {
     }
 }
 
-bool is_bit_set(byte byte, int bit) {
-    return byte & (1 << bit);
+bool is_bit_set(byte data, byte bit) {
+    return data & (1 << bit);
 }
 
 void Display::load_current_char() {
     byte numeral = buffer[currentPos];
     byte position = DIGIT_POSITIONS[currentPos];
     PORTD_write(LATCH_PIN, LOW);
-    for (int i = 7; i >= 0; i--) {
+    for (byte i = 0; i < 8; i++) { // 7 to 0
         PORTD_write(CLOCK_PIN, LOW);
         PORTB_write(DATA_PIN, is_bit_set(numeral, i));
         PORTD_write(CLOCK_PIN, HIGH);
     }
-    for (int i = 7; i >= 0; i--) {
+    for (byte i = 0; i < 8; i++) { // 7 to 0
         PORTD_write(CLOCK_PIN, LOW);
         PORTB_write(DATA_PIN, is_bit_set(position, i));
         PORTD_write(CLOCK_PIN, HIGH);
@@ -39,33 +39,29 @@ void Display::load_current_char() {
     PORTD_write(LATCH_PIN, HIGH);
 }
 
-Display::Display() : currentPos(0) {
-    DDRD |= (1 << LATCH_PIN) | (1 << CLOCK_PIN);
-    DDRB |= (1 << DATA_PIN);
-}
+Display::Display() : currentPos(0) { }
 
-Display::Display(int number) : Display() {
+Display::Display(word number) : Display() {
     write_number(number);
 }
 
-Display::Display(Text t) : Display() {
-    write_string(t);
+Display::Display(char* string) : Display() {
+    write_string(string);
 }
 
-void Display::write_number(int number) {
+void Display::write_number(word number) {
     if (number > 9999) number = 9999;
 
-    for (int i = 0; i < DISPLAY_POSITIONS; i++) {
-        int index = number % 10;
+    for (byte i = 0; i < DIGITS_COUNT; i++) {
+        byte index = number % 10;
         byte digit = NUMERALS[index];
         buffer[i] = digit;
         number /= 10;
     }
 }
 
-void Display::write_string(Text t) {
-    char* string = t.get();
-    for (int i = 0; i < DISPLAY_POSITIONS; i++) {
+void Display::write_string(char* string) {
+    for (byte i = 0; i < DIGITS_COUNT; i++) {
         byte letter = string[i];
         byte subtract = ((letter > 'Z') ? 'a' : 'A');
         byte index = letter - subtract;
@@ -76,5 +72,5 @@ void Display::write_string(Text t) {
 
 void Display::refresh() {
     load_current_char();
-    ++currentPos %= DISPLAY_POSITIONS;
+    ++currentPos %= DIGITS_COUNT;
 }
