@@ -3,8 +3,8 @@
 #include "display.hpp"
 
 void Lock:: increment_digit() {
-    byte exponent = DIGITS_COUNT - cursor;
-    word increment = pow(10, exponent);
+    byte exponent = DIGITS_COUNT - cursor - 1;
+    word increment = power_function(10, exponent);
     current_code += increment;
     current_code %= OVERFLOW;
 }

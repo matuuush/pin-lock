@@ -4,7 +4,7 @@
 #include "constants.hpp"
 #include "display.hpp"
 
-constexpr word OVERFLOW = pow(10, DIGITS_COUNT);
+static word OVERFLOW = power_function(10, DIGITS_COUNT);
 
 enum LockState { LOCKED, UNLOCKED, PASS, FAIL, MODIFIED };
 
@@ -13,9 +13,9 @@ private:
     void locked_increment();
 public:
     word pin_code;
-    word current_code;
-    byte cursor;
-    LockState state;
+    word current_code = 0;
+    byte cursor = 0;
+    LockState state = LOCKED;
     void button_1_activity();
     void button_2_activity();
     void button_3_activity();

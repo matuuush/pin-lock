@@ -9,11 +9,11 @@ Button::Button(byte number) : index(number), status(false) {
 }
 
 bool Button::read_input(byte pin) {
-    return ((PINC & (1 << pin)) == 0);
+    return ((PINC & (1 << pin)) == LOW);
 }
 
 bool Button::is_pressed() {
-    return (read_input(BUTTON_PINS[index]) == LOW);
+    return read_input(BUTTON_PINS[index]);
 }
 
 bool Button::is_triggered() {
