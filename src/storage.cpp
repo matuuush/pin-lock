@@ -6,7 +6,7 @@
 
 word Storage::read_pin() {
     word pin = eeprom_read_word(PIN_ADDRESS);
-    return (pin == EMPTY_VALUE) ? 0 : pin;
+    return (pin == EMPTY_VALUE) ? DEFAULT_CODE : pin;
 }
 
 void Storage::write_pin(word new_pin) {

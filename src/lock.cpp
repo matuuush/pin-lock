@@ -1,12 +1,16 @@
 #include "lock.hpp"
 
+void Lock::set_current_code(word number) {
+    current_code = (number % OVERFLOW);
+}
+
 void Lock:: increment_digit() {
     byte exponent = DIGITS_COUNT - cursor - 1;
-    word increment = power_function(10, exponent);
-    byte prev_digit = (current_code / increment) % 10;
+    word increment = power_function(NUMERAL_BASIS, exponent);
+    byte prev_digit = (current_code / increment) % NUMERAL_BASIS;
     current_code += increment;
-    if (prev_digit == 9) {
-        current_code -= 10 * increment;
+    if (prev_digit == NUMERAL_BASIS - 1) {
+        current_code -= NUMERAL_BASIS * increment;
     }
 }
 
@@ -36,7 +40,7 @@ void Lock::change_pin_during() {
 
 void Lock::change_pin_after() {
     pin_code = current_code;
-    current_code = 0;
+    current_code = DEFAULT_CODE;
     state = PASSWORD_OK;
 }
 

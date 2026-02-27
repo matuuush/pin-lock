@@ -46,7 +46,7 @@ void init_storage() {
 }
 
 void init_lock() {
-    word number = (APP_MODE == SHOW_CODE) ? lock.pin_code : 0;
+    word number = (APP_MODE == SHOW_CODE) ? lock.pin_code : DEFAULT_CODE;
     lock.set_current_code(number);
 }
 
@@ -119,7 +119,6 @@ void lock_decision_tree() {
 }
 
 void loop() {
-    // operate_lock_with_buttons();
     lock_decision_tree();
     display_decision_tree();
     display.refresh();

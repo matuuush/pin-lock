@@ -63,10 +63,10 @@ void Display::write_cursor(byte position) {
 
 void Display::write_number(word number) {
     for (byte i = 0; i < DIGITS_COUNT; i++) {
-        byte index = number % 10;
+        byte index = number % NUMERAL_BASIS;
         byte digit = NUMERALS[index];
         buffer[DIGITS_COUNT - i - 1] = digit;
-        number /= 10;
+        number /= NUMERAL_BASIS;
     }
 }
 

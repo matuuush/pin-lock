@@ -4,13 +4,11 @@
 #include "constants.hpp"
 #include "display.hpp"
 
-static word OVERFLOW = power_function(10, DIGITS_COUNT);
+static word OVERFLOW = power_function(NUMERAL_BASIS, DIGITS_COUNT);
 
 enum LockState { LOCKED, LOCK, UNLOCKED, PASS, FAIL, SET, PASSWORD_OK, MODIFIED };
 
 class Lock {
-private:
-    void locked_increment();
 public:
     word pin_code;
     word current_code;

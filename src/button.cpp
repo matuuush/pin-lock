@@ -4,8 +4,6 @@ Button::Button() { }
 Button::Button(byte number) : index(number), status(false) {
     DDRC &= ~(1 << BUTTON_PINS[index]);
     PORTC |= (1 << BUTTON_PINS[index]);
-    /*DDRC &= ~((1 << PC1) | (1 << PC2) | (1 << PC3));
-    PORTC |= ((1 << PC1) | (1 << PC2) | (1 << PC3));*/
 }
 
 bool Button::read_input(byte pin) {

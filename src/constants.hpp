@@ -7,12 +7,16 @@
 typedef uint8_t byte;
 typedef uint16_t word;
 
+constexpr word DEFAULT_CODE = 0;
+
 constexpr byte HIGH = 1;
 constexpr byte LOW = 0;
 
 constexpr byte FIRST = 0;
 constexpr byte SECOND = 1;
 constexpr byte THIRD = 2;
+
+constexpr byte NUMERAL_BASIS = 10;
 
 word power_function(byte base, byte exponent);
 

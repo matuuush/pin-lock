@@ -55,7 +55,7 @@ void lock_state() {
     if (buttons[FIRST].is_triggered()
     || buttons[SECOND].is_triggered()
     || buttons[THIRD].is_triggered()) {
-        lock.set_current_code(0);
+        lock.set_current_code(DEFAULT_CODE);
         lock.hide_message();
     }
 }
