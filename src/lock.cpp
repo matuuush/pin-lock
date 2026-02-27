@@ -1,13 +1,10 @@
 #include "lock.hpp"
 
-#include "display.hpp"
-
 void Lock:: increment_digit() {
     byte exponent = DIGITS_COUNT - cursor - 1;
     word increment = power_function(10, exponent);
     byte prev_digit = (current_code / increment) % 10;
     current_code += increment;
-    // current_code %= OVERFLOW;
     if (prev_digit == 9) {
         current_code -= 10 * increment;
     }
@@ -22,71 +19,27 @@ void Lock::unlock_attempt() {
 }
 
 void Lock::hide_message() {
-    if (state == PASS) {
+    if (state == PASS || state == PASSWORD_OK) {
         state = UNLOCKED;
-    } else if (state == FAIL) {
+    } else if (state == FAIL || state == LOCK) {
         state = LOCKED;
     }
 }
 
-void Lock::button_1_activity() {
-    switch (state) {
-        case LOCKED:
-        case MODIFIED:
-            increment_digit();
-            break;
-        case PASS:
-        case FAIL:
-            hide_message();
-            break;
-        case UNLOCKED:
-        default:
-            break;
-    }
+void Lock::change_pin_beginning() {
+    state = SET;
 }
 
-void Lock::button_2_activity() {
-    switch (state) {
-        case LOCKED:
-        case MODIFIED:
-            move_cursor();
-            break;
-        case PASS:
-        case FAIL:
-            hide_message();
-        case UNLOCKED:
-        default:
-            break;
-    }
-}
-
-void Lock::button_3_activity() {
-    switch (state) {
-        case LOCKED:
-            unlock_attempt();
-            break;
-        case UNLOCKED:
-            new_pin_code_procedure();
-            break;
-        case MODIFIED:
-            set_new_pin_code();
-            break;
-        case PASS:
-        case FAIL:
-            hide_message();
-        default:
-            break;
-    }
-}
-
-void Lock::new_pin_code_procedure() {
+void Lock::change_pin_during() {
     state = MODIFIED;
 }
 
-void Lock::lock_system() {
-    state = LOCKED;
-}
-void Lock::set_new_pin_code() {
+void Lock::change_pin_after() {
     pin_code = current_code;
     current_code = 0;
+    state = PASSWORD_OK;
+}
+
+void Lock::lock_system() {
+    state = LOCK;
 }

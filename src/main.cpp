@@ -2,19 +2,29 @@
 #include "constants.hpp"
 #include "display.hpp"
 #include "lock.hpp"
-#include "uart.hpp"
+#include "states.hpp"
+#include "storage.hpp"
+// #include "uart.hpp"
+
+enum Mode { GUESS_CODE, SHOW_CODE };
+
+constexpr Mode APP_MODE = GUESS_CODE;
+
+constexpr const char* PASS_MESSAGE = "PASS";
+constexpr const char* FAIL_MESSAGE = "FAIL";
+constexpr const char* LOCK_MESSAGE = "LOCK";
+constexpr const char* UNLOCKED_MESSAGE = "FREE";
+constexpr const char* SET_MESSAGE = "SET ";
+constexpr const char* PASSWORD_OK_MESSAGE = "GOOD";
+constexpr const char* EMPTY_MESSAGE = "    ";
 
 Lock lock;
 Display display;
 Button buttons[BUTTON_COUNT];
-UART serial;
+Storage storage;
+// UART serial;
 
 word index = 0;
-
-void init_pins() {
-    DDRD |= (1 << LATCH_PIN) | (1 << CLOCK_PIN);
-    DDRB |= (1 << DATA_PIN);
-}
 
 void init_buttons() {
     for (byte i = 0; i < BUTTON_COUNT; i++) {
@@ -30,49 +40,89 @@ void init_leds() {
     }
 }
 
-void init() {
-    serial.init(115200);
-    init_pins();
-    init_buttons();
-    init_leds();
-    display.write_number(6767);
+void init_storage() {
+    word saved_pin = storage.read_pin();
+    lock.pin_code = saved_pin;
 }
 
-void decision_tree() {
+void init_lock() {
+    word number = (APP_MODE == SHOW_CODE) ? lock.pin_code : 0;
+    lock.set_current_code(number);
+}
+
+void init() {
+    // serial.init(115200);
+    init_buttons();
+    init_leds();
+    init_storage();
+    init_lock();
+}
+
+void display_decision_tree() {
     switch (lock.state) {
         case LOCKED:
         case MODIFIED:
             display.write_number(lock.current_code);
+            display.write_cursor(lock.cursor);
             break;
         case PASS:
-            display.write_string("PASS");
+            display.write_string(PASS_MESSAGE);
             break;
         case FAIL:
-            display.write_string("FAIL");
+            display.write_string(FAIL_MESSAGE);
+            break;
+        case LOCK:
+            display.write_string(LOCK_MESSAGE);
             break;
         case UNLOCKED:
-            display.write_string("    ");
+            display.write_string(UNLOCKED_MESSAGE);
+            break;
+        case SET:
+            display.write_string(SET_MESSAGE);
+            break;
+        case PASSWORD_OK:
+            display.write_string(PASSWORD_OK_MESSAGE);
         default:
-        break;
+            break;
     }
 }
 
-void loop() { // translate to switches per the lock state later and divide into functions per state / button
-    if (buttons[FIRST].is_triggered()) {
-        lock.button_1_activity();
+void lock_decision_tree() {
+    switch (lock.state) {
+        case LOCKED:
+            locked_state();
+            break;
+        case MODIFIED:
+            modified_state();
+            break;
+        case PASS:
+            pass_state();
+            break;
+        case FAIL:
+            fail_state();
+            break;
+        case LOCK:
+            lock_state();
+            break;
+        case UNLOCKED:
+            unlocked_state();
+            break;
+        case SET:
+            set_state();
+            break;
+        case PASSWORD_OK:
+            password_ok_state();
+            break;
+        default:
+            break;
     }
-    if (buttons[SECOND].is_triggered()) {
-        lock.button_2_activity();
-    }
-    if (buttons[THIRD].is_triggered()) {
-        lock.button_3_activity();
-    } 
-    display.write_number(lock.current_code);
-    if (lock.state == LOCKED || lock.state == MODIFIED) {
-        display.write_cursor(lock.cursor);
-    }
-    display.refresh(); // do not remove
+}
 
+void loop() {
+    // operate_lock_with_buttons();
+    lock_decision_tree();
+    display_decision_tree();
+    display.refresh();
 }
 
 int main(void) {

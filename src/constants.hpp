@@ -14,10 +14,6 @@ constexpr byte FIRST = 0;
 constexpr byte SECOND = 1;
 constexpr byte THIRD = 2;
 
-constexpr byte LATCH_PIN = PD4;
-constexpr byte CLOCK_PIN = PD7;
-constexpr byte DATA_PIN  = PB0;
-
 word power_function(byte base, byte exponent);
 
 #endif

@@ -40,13 +40,16 @@ void Display::load_current_char() {
     PORTD_write(LATCH_PIN, HIGH);
 }
 
-Display::Display() : currentPos(0) { }
+Display::Display() : currentPos(0) {
+    DDRD |= (1 << LATCH_PIN) | (1 << CLOCK_PIN);
+    DDRB |= (1 << DATA_PIN);
+}
 
 Display::Display(word number) : Display() {
     write_number(number);
 }
 
-Display::Display(char* string) : Display() {
+Display::Display(const char* string) : Display() {
     write_string(string);
 }
 
@@ -67,13 +70,13 @@ void Display::write_number(word number) {
     }
 }
 
-void Display::write_string(char* string) {
+void Display::write_string(const char* string) {
     for (byte i = 0; i < DIGITS_COUNT; i++) {
         byte letter = string[i];
         byte subtract = ((letter > 'Z') ? 'a' : 'A');
         byte index = letter - subtract;
         byte ch = CHARS[index];
-        buffer[i] = ch;
+        buffer[i] = (letter == ' ') ? SPACE_CHAR : ch;
     }
 }
 

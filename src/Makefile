@@ -16,6 +16,9 @@ LDFLAGS = -mmcu=$(MCU) -Wl,--gc-sections
 
 all: $(TARGET).hex size upload
 
+erase_eeprom:
+	$(AVRDUDE) -v -p $(MCU) -c arduino -P $(PORT) -b $(BAUD) -D -U eeprom:w:0xFF:i
+
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
@@ -34,4 +37,4 @@ upload: $(TARGET).hex
 clean:
 	rm -f *.o *.elf *.hex
 
-.PHONY: all size upload clean
+.PHONY: all size upload clean erase_eeprom
