@@ -27,12 +27,12 @@ void Display::load_current_char() {
     byte numeral = buffer[currentPos];
     byte position = DIGIT_POSITIONS[currentPos];
     PORTD_write(LATCH_PIN, LOW);
-    for (byte i = 0; i < 8; i++) { // 7 to 0
+    for (byte i = 0; i < 8; i++) {
         PORTD_write(CLOCK_PIN, LOW);
         PORTB_write(DATA_PIN, is_bit_set(numeral, 8 - i - 1));
         PORTD_write(CLOCK_PIN, HIGH);
     }
-    for (byte i = 0; i < 8; i++) { // 7 to 0
+    for (byte i = 0; i < 8; i++) {
         PORTD_write(CLOCK_PIN, LOW);
         PORTB_write(DATA_PIN, is_bit_set(position, 8 - i - 1));
         PORTD_write(CLOCK_PIN, HIGH);
@@ -50,9 +50,15 @@ Display::Display(char* string) : Display() {
     write_string(string);
 }
 
-void Display::write_number(word number) {
-    // number %= OVERFLOW;
+void Display::write_cursor(byte position) {
+    //buffer[position] &= DOT_GLYPH; // dot is on the first bit
+    byte prev_pos = currentPos;
+    currentPos = position;
+    load_current_char();
+    currentPos = prev_pos;
+}
 
+void Display::write_number(word number) {
     for (byte i = 0; i < DIGITS_COUNT; i++) {
         byte index = number % 10;
         byte digit = NUMERALS[index];

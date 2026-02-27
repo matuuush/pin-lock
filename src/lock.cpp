@@ -5,8 +5,12 @@
 void Lock:: increment_digit() {
     byte exponent = DIGITS_COUNT - cursor - 1;
     word increment = power_function(10, exponent);
+    byte prev_digit = (current_code / increment) % 10;
     current_code += increment;
-    current_code %= OVERFLOW;
+    // current_code %= OVERFLOW;
+    if (prev_digit == 9) {
+        current_code -= 10 * increment;
+    }
 }
 
 void Lock::move_cursor() {

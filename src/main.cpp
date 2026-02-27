@@ -57,35 +57,22 @@ void decision_tree() {
     }
 }
 
-void loop() {
-    /*if (buttons[FIRST].is_triggered()) {
-        lock.button_1_activity();
-    } else if (buttons[SECOND].is_triggered()) {
-        lock.button_2_activity();
-    } else if (buttons[THIRD].is_triggered()) {
-        lock.button_3_activity();
-    }*/
+void loop() { // translate to switches per the lock state later and divide into functions per state / button
     if (buttons[FIRST].is_triggered()) {
         lock.button_1_activity();
-        PORTB &= ~(1 << LED_PINS[FIRST]);
-    } else {
-        PORTB |= (1 << LED_PINS[FIRST]);
     }
-    
     if (buttons[SECOND].is_triggered()) {
         lock.button_2_activity();
-        PORTB &= ~(1 << LED_PINS[SECOND]);
-    } else {
-        PORTB |= (1 << LED_PINS[SECOND]);
     }
     if (buttons[THIRD].is_triggered()) {
         lock.button_3_activity();
-        PORTB &= ~(1 << LED_PINS[THIRD]);
-    } else {
-        PORTB |= (1 << LED_PINS[THIRD]);
-    }
+    } 
     display.write_number(lock.current_code);
+    if (lock.state == LOCKED || lock.state == MODIFIED) {
+        display.write_cursor(lock.cursor);
+    }
     display.refresh(); // do not remove
+
 }
 
 int main(void) {
