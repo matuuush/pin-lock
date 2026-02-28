@@ -1,5 +1,6 @@
 #include "button.hpp"
 #include "constants.hpp"
+#include "death.hpp"
 #include "display.hpp"
 #include "light.hpp"
 #include "lock.hpp"
@@ -7,20 +8,12 @@
 #include "storage.hpp"
 // #include "uart.hpp"
 
-enum Mode { GUESS_CODE, SHOW_CODE };
+enum Mode { GUESS_CODE, SHOW_CODE, RESET_PIN };
 
 constexpr Mode APP_MODE = GUESS_CODE;
 
-constexpr const char* PASS_MESSAGE = "PASS";
-constexpr const char* FAIL_MESSAGE = "FAIL";
-constexpr const char* LOCK_MESSAGE = "LOCK";
-constexpr const char* UNLOCKED_MESSAGE = "FREE";
-constexpr const char* SET_MESSAGE = "SET ";
-constexpr const char* PASSWORD_OK_MESSAGE = "GOOD";
-constexpr const char* DEAD_MESSAGE = "DEAD";
-constexpr const char* EMPTY_MESSAGE = "    ";
-
 Lock lock;
+Death death;
 Display display;
 Light lights[LIGHTS_COUNT];
 Button buttons[BUTTON_COUNT];
@@ -34,7 +27,7 @@ void init_buttons() {
     }
 }
 
-void init_leds() {
+void init_lights() {
     for (byte i = 0; i < LIGHTS_COUNT; i++) {
         Light new_light(i);
         lights[i] = new_light;
@@ -51,12 +44,18 @@ void init_lock() {
     lock.set_current_code(number);
 }
 
+void init_death() {
+    Death new_death(DEAD_MESSAGE, LOCK_MESSAGE);
+    death = new_death;
+}
+
 void init() {
     // serial.init(115200);
     init_buttons();
-    init_leds();
+    init_lights();
     init_storage();
     init_lock();
+    init_death();
 }
 
 void display_decision_tree() {
@@ -85,7 +84,8 @@ void display_decision_tree() {
             display.write_string(PASSWORD_OK_MESSAGE);
             break;
         case DEAD:
-            display.write_string(DEAD_MESSAGE);
+            display.write_string((const char*)death.current_word);
+            display.write_cursor(death.cursor);
         default:
             break;
     }
@@ -118,21 +118,34 @@ void lock_decision_tree() {
             password_ok_state();
             break;
         case DEAD:
+            dead_state();
         default:
             break;
     }
 }
 
-void loop() {
-    lock_decision_tree();
-    display_decision_tree();
+bool loop() {
+    switch (APP_MODE) {
+        case SHOW_CODE:
+            display.write_number(lock.pin_code);
+            break;
+        case RESET_PIN:
+            storage.write_pin(0);
+            return false;
+        case GUESS_CODE:
+        default:
+            lock_decision_tree();
+            display_decision_tree();
+            turn_off_lights();
+            _delay_ms(1);
+            break;
+    }
     display.refresh();
+    return true;
 }
 
 int main(void) {
     init();
-    while (true) {
-        loop();
-    }
+    while (loop());
     return 0;
 }

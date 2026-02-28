@@ -8,6 +8,7 @@
 #include "storage.hpp"
 
 extern Lock lock;
+extern Death death;
 extern Light lights[LIGHTS_COUNT];
 extern Button buttons[BUTTON_COUNT];
 extern Storage storage;
@@ -17,6 +18,12 @@ void show_remaining_attempts_count() {
         Light light = lights[i];
         bool status = light.index < lock.attempts;
         lights[i].change(status);
+    }
+}
+
+void turn_off_lights() {
+    for (byte i = 0; i < LIGHTS_COUNT; i++) {
+        lights[i].change(false);
     }
 }
 
@@ -101,6 +108,18 @@ void password_ok_state() {
     || buttons[SECOND].is_triggered()
     || buttons[THIRD].is_triggered()) {
         lock.hide_message();
+    }
+}
+
+void dead_state() {
+    if (buttons[FIRST].is_triggered()) {
+        death.increment_char();
+    }
+    if (buttons[SECOND].is_triggered()) {
+        death.move_cursor();
+    }
+    if (buttons[THIRD].is_triggered()) {
+        death.unlock_attempt();
     }
 }
 
