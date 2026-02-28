@@ -4,7 +4,7 @@ Author: Matúš Farkaš
 
 ## General description
 
-The goal of this project is to implement a 4-digit PIN code lock system on an ATmega328PB microcontroller equipped with a Multi-function Shield. The PIN code itself will be stored in a persistent memory to prevent bypassing the lock by disconnecting the power delivery.
+The goal of this project is to implement a 4-digit PIN code lock system on an ATmega328P microcontroller equipped with a Multi-function Shield. The PIN code itself will be stored in a persistent memory to prevent bypassing the lock by disconnecting the power delivery. Moreover, it will be impossible for the attacker to guess the password by timing how long it takes the system to verify the password.
 
 ## User Interaction
 - Select Value (Potentiometer)
@@ -39,8 +39,3 @@ The goal of this project is to implement a 4-digit PIN code lock system on an AT
     - Selects digit value (0-9)
   - 4 LED lights
     - Status lights (remaining attempts)
-
-
-# poznámky
-
-pridaj časovanie proti útočníkovi aby nedokázal odstopovať čas na chybu a pomocou toho dekódovať správny prístupový kód 
