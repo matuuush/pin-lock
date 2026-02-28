@@ -83,7 +83,7 @@ void lock_state() {
     show_remaining_attempts_count();
 }
 
-void unlocked_state() {
+void free_state() {
     if (buttons[FIRST].is_triggered()) {
         // do nothing
     }
@@ -103,7 +103,7 @@ void set_state() {
     }
 }
 
-void password_ok_state() {
+void good_state() {
     if (buttons[FIRST].is_triggered()
     || buttons[SECOND].is_triggered()
     || buttons[THIRD].is_triggered()) {

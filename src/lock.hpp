@@ -8,7 +8,7 @@ constexpr byte DEFAULT_ATTEMPTS = 3;
 
 static word OVERFLOW = power_function(NUMERAL_BASIS, DIGITS_COUNT);
 
-enum LockState { LOCKED, LOCK, UNLOCKED, PASS, FAIL, SET, PASSWORD_OK, MODIFIED, DEAD };
+enum LockState { LOCKED, LOCK, FREE, PASS, FAIL, SET, GOOD, MODIFIED, DEAD };
 
 class Lock {
 public:

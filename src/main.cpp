@@ -74,14 +74,14 @@ void display_decision_tree() {
         case LOCK:
             display.write_string(LOCK_MESSAGE);
             break;
-        case UNLOCKED:
-            display.write_string(UNLOCKED_MESSAGE);
+        case FREE:
+            display.write_string(FREE_MESSAGE);
             break;
         case SET:
             display.write_string(SET_MESSAGE);
             break;
-        case PASSWORD_OK:
-            display.write_string(PASSWORD_OK_MESSAGE);
+        case GOOD:
+            display.write_string(GOOD_MESSAGE);
             break;
         case DEAD:
             display.write_string((const char*)death.current_word);
@@ -108,14 +108,14 @@ void lock_decision_tree() {
         case LOCK:
             lock_state();
             break;
-        case UNLOCKED:
-            unlocked_state();
+        case FREE:
+            free_state();
             break;
         case SET:
             set_state();
             break;
-        case PASSWORD_OK:
-            password_ok_state();
+        case GOOD:
+            good_state();
             break;
         case DEAD:
             dead_state();

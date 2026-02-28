@@ -40,8 +40,8 @@ void Lock::unlock_attempt() {
 }
 
 void Lock::hide_message() {
-    if (state == PASS || state == PASSWORD_OK) {
-        state = UNLOCKED;
+    if (state == PASS || state == GOOD) {
+        state = FREE;
     } else if (state == FAIL || state == LOCK) {
         state = LOCKED;
     }
@@ -58,7 +58,7 @@ void Lock::change_pin_during() {
 void Lock::change_pin_after() {
     pin_code = current_code;
     current_code = DEFAULT_CODE;
-    state = PASSWORD_OK;
+    state = GOOD;
 }
 
 void Lock::lock_system() {

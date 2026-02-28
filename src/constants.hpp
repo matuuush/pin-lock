@@ -18,12 +18,12 @@ constexpr byte THIRD = 2;
 
 constexpr byte NUMERAL_BASIS = 10;
 
+constexpr const char* SET_MESSAGE = "SET ";
 constexpr const char* PASS_MESSAGE = "PASS";
 constexpr const char* FAIL_MESSAGE = "FAIL";
 constexpr const char* LOCK_MESSAGE = "LOCK";
-constexpr const char* UNLOCKED_MESSAGE = "FREE";
-constexpr const char* SET_MESSAGE = "SET ";
-constexpr const char* PASSWORD_OK_MESSAGE = "GOOD";
+constexpr const char* FREE_MESSAGE = "FREE";
+constexpr const char* GOOD_MESSAGE = "GOOD";
 constexpr const char* DEAD_MESSAGE = "DEAD";
 constexpr const char* EMPTY_MESSAGE = "    ";
 
