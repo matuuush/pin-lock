@@ -26,20 +26,9 @@ Features:
 - Forgives
   - After failing to unlock the system the user has to solve a little puzzle before getting 3 more attempts to guess the code.
 
-## Entry requirements
-
-- Computer: ATmega328P
-- Accessories: Multi-function Shield
-
-## Entry configuration
-
-- PIN code: 0000
-- Number of attempts: 3
-- After connecting the computer to the power source:
-  - Display reads `0000`.
-  - Current system state is `LOCKED`.
-
 ## Controls / Behaviour / State Changes
+
+The numbers on the lines represent indexes of buttons whose press can trigger the change of state based on the line orientation.
 
 ![State_automata](state-diagram.png)
 
