@@ -19,7 +19,17 @@ void Lock::move_cursor() {
 }
 
 void Lock::unlock_attempt() {
-    state = (current_code == pin_code) ? PASS : FAIL;
+    if (current_code == pin_code) {
+        state = PASS;
+        attempts = DEFAULT_ATTEMPTS;
+    } else {
+        state = FAIL;
+        if (attempts > 0) {
+            attempts--;
+        } else {
+            state = DEAD;
+        }
+    }
 }
 
 void Lock::hide_message() {

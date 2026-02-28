@@ -1,11 +1,24 @@
+#ifndef STATES_HPP
+#define STATES_HPP
+
 #include "button.hpp"
 #include "constants.hpp"
+#include "light.hpp"
 #include "lock.hpp"
 #include "storage.hpp"
 
 extern Lock lock;
+extern Light lights[LIGHTS_COUNT];
 extern Button buttons[BUTTON_COUNT];
 extern Storage storage;
+
+void show_remaining_attempts_count() {
+    for (byte i = 0; i < LIGHTS_COUNT; i++) {
+        Light light = lights[i];
+        bool status = light.index < lock.attempts;
+        lights[i].change(status);
+    }
+}
 
 void locked_state() {
     if (buttons[FIRST].is_triggered()) {
@@ -17,6 +30,7 @@ void locked_state() {
     if (buttons[THIRD].is_triggered()) {
         lock.unlock_attempt();
     }
+    show_remaining_attempts_count();
 }
 
 void modified_state() {
@@ -49,6 +63,7 @@ void fail_state() {
     || buttons[THIRD].is_triggered()) {
         lock.hide_message();
     }
+    show_remaining_attempts_count();
 }
 
 void lock_state() {
@@ -58,6 +73,7 @@ void lock_state() {
         lock.set_current_code(DEFAULT_CODE);
         lock.hide_message();
     }
+    show_remaining_attempts_count();
 }
 
 void unlocked_state() {
@@ -87,3 +103,5 @@ void password_ok_state() {
         lock.hide_message();
     }
 }
+
+#endif

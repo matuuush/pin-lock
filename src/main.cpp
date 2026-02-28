@@ -1,6 +1,7 @@
 #include "button.hpp"
 #include "constants.hpp"
 #include "display.hpp"
+#include "light.hpp"
 #include "lock.hpp"
 #include "states.hpp"
 #include "storage.hpp"
@@ -16,15 +17,15 @@ constexpr const char* LOCK_MESSAGE = "LOCK";
 constexpr const char* UNLOCKED_MESSAGE = "FREE";
 constexpr const char* SET_MESSAGE = "SET ";
 constexpr const char* PASSWORD_OK_MESSAGE = "GOOD";
+constexpr const char* DEAD_MESSAGE = "DEAD";
 constexpr const char* EMPTY_MESSAGE = "    ";
 
 Lock lock;
 Display display;
+Light lights[LIGHTS_COUNT];
 Button buttons[BUTTON_COUNT];
 Storage storage;
 // UART serial;
-
-word index = 0;
 
 void init_buttons() {
     for (byte i = 0; i < BUTTON_COUNT; i++) {
@@ -34,9 +35,9 @@ void init_buttons() {
 }
 
 void init_leds() {
-    for (byte i = 0; i < LEDS_COUNT; i++) {
-        DDRB |= (1 << LED_PINS[i]);
-        PORTB |= (1 << LED_PINS[i]);
+    for (byte i = 0; i < LIGHTS_COUNT; i++) {
+        Light new_light(i);
+        lights[i] = new_light;
     }
 }
 
@@ -82,6 +83,9 @@ void display_decision_tree() {
             break;
         case PASSWORD_OK:
             display.write_string(PASSWORD_OK_MESSAGE);
+            break;
+        case DEAD:
+            display.write_string(DEAD_MESSAGE);
         default:
             break;
     }
@@ -113,6 +117,7 @@ void lock_decision_tree() {
         case PASSWORD_OK:
             password_ok_state();
             break;
+        case DEAD:
         default:
             break;
     }
