@@ -23,12 +23,3 @@ bool Button::is_triggered() {
     }
     return false;
 }
-
-bool Button::is_released() {
-    bool immediate_status = is_pressed();
-    if (status != immediate_status) {
-        status = immediate_status;
-        return (status == false);
-    }
-    return false;
-}

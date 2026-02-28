@@ -15,7 +15,6 @@ public:
     bool read_input(byte pin);
     bool is_pressed();
     bool is_triggered();
-    bool is_released();
 };
 
 #endif
