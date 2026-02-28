@@ -1,6 +1,7 @@
 #include "button.hpp"
 
 Button::Button() { }
+
 Button::Button(byte number) : index(number), status(false) {
     DDRC &= ~(1 << BUTTON_PINS[index]);
     PORTC |= (1 << BUTTON_PINS[index]);

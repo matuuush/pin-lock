@@ -1,27 +1,6 @@
 #include "display.hpp"
 
-#include "text.hpp"
 #include "lock.hpp"
-
-void PORTD_write(byte pin, byte value) {
-    if (value == LOW) {
-        PORTD &= ~(1 << pin);
-    } else if (value == HIGH) {
-        PORTD |= (1 << pin);
-    }
-}
-
-void PORTB_write(byte pin, byte value) {
-    if (value == LOW) {
-        PORTB &= ~(1 << pin);
-    } else if (value == HIGH) {
-        PORTB |= (1 << pin);
-    }
-}
-
-bool is_bit_set(byte data, byte bit) {
-    return data & (1 << bit);
-}
 
 void Display::load_current_char() {
     byte numeral = buffer[currentPos];

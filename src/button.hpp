@@ -6,9 +6,6 @@
 constexpr byte BUTTON_PINS[] = { PC1, PC2, PC3 };
 constexpr byte BUTTON_COUNT = sizeof(BUTTON_PINS) / sizeof(BUTTON_PINS[0]);
 
-constexpr byte LED_PINS[] = { PB5, PB4, PB3, PB2 };
-constexpr byte LEDS_COUNT = sizeof(LED_PINS) / sizeof(LED_PINS[0]);
-
 class Button {
 public:
     byte index;
