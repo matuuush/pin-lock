@@ -1,5 +1,12 @@
 #include "lock.hpp"
 
+Lock::Lock() : current_code(DEFAULT_CODE), cursor(0),
+    attempts(DEFAULT_ATTEMPTS), state(LOCKED) { }
+
+Lock::Lock(word pin) : Lock() {
+    pin_code = pin;
+}
+
 void Lock::set_current_code(word number) {
     current_code = (number % OVERFLOW);
 }

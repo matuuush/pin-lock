@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include "constants.hpp"
 
-constexpr word* PIN_ADDRESS = (word*) 0x00;
+constexpr word* PIN_ADDRESS = (word*) 0;
 constexpr word EMPTY_VALUE = 0xFFFF;
 
 class Storage {

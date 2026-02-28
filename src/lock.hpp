@@ -14,9 +14,11 @@ class Lock {
 public:
     word pin_code;
     word current_code;
-    byte cursor = 0;
-    byte attempts = DEFAULT_ATTEMPTS;
-    LockState state = LOCKED;
+    byte cursor;
+    byte attempts;
+    LockState state;
+    Lock();
+    Lock(word pin);
     void set_current_code(word number);
     void hide_message();
     void increment_digit();

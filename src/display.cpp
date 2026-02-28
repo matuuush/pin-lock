@@ -54,7 +54,7 @@ void Display::write_string(const char* string) {
         byte letter = string[i];
         byte subtract = ((letter > 'Z') ? 'a' : 'A');
         byte index = letter - subtract;
-        byte ch = CHARS[index];
+        byte ch = ALPHABET[index];
         buffer[i] = (letter == ' ') ? SPACE_CHAR : ch;
     }
 }
