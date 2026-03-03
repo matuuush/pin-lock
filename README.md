@@ -1,4 +1,4 @@
-# Digital 4-digit PIN code lock system
+# Digital 4-digit PIN Code Lock System
 
 Winter semester 2025/2026 microcontroller programming semestral project.
 
