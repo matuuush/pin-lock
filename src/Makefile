@@ -14,7 +14,7 @@ AVRDUDE = avrdude
 CXXFLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os -Wall -Wextra -std=c++11 -ffunction-sections -fdata-sections
 LDFLAGS = -mmcu=$(MCU) -Wl,--gc-sections
 
-all: $(TARGET).hex size upload
+all: $(TARGET).hex size #upload
 
 erase_eeprom:
 	$(AVRDUDE) -v -p $(MCU) -c arduino -P $(PORT) -b $(BAUD) -D -U eeprom:w:0xFF:i

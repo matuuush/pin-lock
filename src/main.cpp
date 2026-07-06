@@ -6,7 +6,12 @@
 #include "lock.hpp"
 #include "states.hpp"
 #include "storage.hpp"
-// #include "uart.hpp"
+
+// #define DEBUG
+
+#ifdef DEBUG
+#include "uart.hpp"
+#endif
 
 enum Mode { GUESS_CODE, SHOW_CODE, RESET_PIN };
 
@@ -18,7 +23,10 @@ Display display;
 Light lights[LIGHTS_COUNT];
 Button buttons[BUTTON_COUNT];
 Storage storage;
-// UART serial;
+
+#ifdef DEBUG
+UART serial;
+#endif
 
 void init_buttons() {
     for (byte i = 0; i < BUTTON_COUNT; i++) {
@@ -50,7 +58,9 @@ void init_death() {
 }
 
 void init() {
-    // serial.init(115200);
+#ifdef DEBUG
+    serial.init(115200);
+#endif
     init_buttons();
     init_lights();
     init_storage();

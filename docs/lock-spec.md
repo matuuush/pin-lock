@@ -1,4 +1,6 @@
-# Digital 4-digit PIN Code Lock System specification
+# Digital 4-digit PIN Code Lock System
+
+Project specification
 
 Author: Matúš Farkaš
 
