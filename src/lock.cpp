@@ -1,5 +1,7 @@
 #include "lock.hpp"
 
+#include "concrete_states.hpp"
+
 Lock::Lock() : current_code(DEFAULT_CODE), cursor(0),
     attempts(DEFAULT_ATTEMPTS), state(LOCKED) { }
 
