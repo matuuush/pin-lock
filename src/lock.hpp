@@ -3,12 +3,11 @@
 
 #include "constants.hpp"
 #include "display.hpp"
+#include "abstract_state.hpp"
 
 constexpr byte DEFAULT_ATTEMPTS = 3;
 
 static word OVERFLOW = power_function(NUMERAL_BASIS, DIGITS_COUNT);
-
-enum LockState { LOCKED, LOCK, FREE, PASS, FAIL, SET, GOOD, MODIFIED, DEAD };
 
 class Lock {
 public:
@@ -16,7 +15,7 @@ public:
     word current_code;
     byte cursor;
     byte attempts;
-    LockState state;
+    AbstractLockState* state;
     Lock();
     Lock(word pin);
     void set_current_code(word number);

@@ -1,10 +1,10 @@
 #include "button.hpp"
+#include "concrete_states.hpp"
 #include "constants.hpp"
 #include "death.hpp"
 #include "display.hpp"
 #include "light.hpp"
 #include "lock.hpp"
-#include "states.hpp"
 #include "storage.hpp"
 
 // #define DEBUG
@@ -68,72 +68,6 @@ void init() {
     init_death();
 }
 
-void display_decision_tree() {
-    switch (lock.state) {
-        case LOCKED:
-        case MODIFIED:
-            display.write_number(lock.current_code);
-            display.write_cursor(lock.cursor);
-            break;
-        case PASS:
-            display.write_string(PASS_MESSAGE);
-            break;
-        case FAIL:
-            display.write_string(FAIL_MESSAGE);
-            break;
-        case LOCK:
-            display.write_string(LOCK_MESSAGE);
-            break;
-        case FREE:
-            display.write_string(FREE_MESSAGE);
-            break;
-        case SET:
-            display.write_string(SET_MESSAGE);
-            break;
-        case GOOD:
-            display.write_string(GOOD_MESSAGE);
-            break;
-        case DEAD:
-            display.write_string((const char*)death.current_word);
-            display.write_cursor(death.cursor);
-        default:
-            break;
-    }
-}
-
-void lock_decision_tree() {
-    switch (lock.state) {
-        case LOCKED:
-            locked_state();
-            break;
-        case MODIFIED:
-            modified_state();
-            break;
-        case PASS:
-            pass_state();
-            break;
-        case FAIL:
-            fail_state();
-            break;
-        case LOCK:
-            lock_state();
-            break;
-        case FREE:
-            free_state();
-            break;
-        case SET:
-            set_state();
-            break;
-        case GOOD:
-            good_state();
-            break;
-        case DEAD:
-            dead_state();
-        default:
-            break;
-    }
-}
-
 bool loop() {
     switch (APP_MODE) {
         case SHOW_CODE:
@@ -144,8 +78,8 @@ bool loop() {
             return false;
         case GUESS_CODE:
         default:
-            lock_decision_tree();
-            display_decision_tree();
+            lock.state->lock_action();
+            lock.state->display_action();
             turn_off_lights();
             _delay_ms(1);
             break;
